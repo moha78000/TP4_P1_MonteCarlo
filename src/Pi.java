@@ -17,7 +17,7 @@ public class Pi
     {
 	long total=0;
 	// 10 workers, 50000 iterations eac
-	total = new Master().doRun(100000000 / 10, 10); 
+	total = new Master().doRun(100000000, 10); 
 	System.out.println("total from Master = " + total);
 	
     }
@@ -68,7 +68,7 @@ class Master {
 
 
 
-	String fileName = "results.csv";	
+	String fileName = "pi_results_with_weak_scaling_master-workers.csv";	
         try (java.io.FileWriter writer = new java.io.FileWriter(fileName, true)) { // true = append
             // Vérifier si le fichier est vide pour écrire l’en-tête
             java.io.File file = new java.io.File(fileName);
@@ -78,7 +78,7 @@ class Master {
 
 			double difference = pi - Math.PI;
     		double errorPercent = difference / Math.PI * 100;
-    		long ntotal = (long) totalCount;
+    		long ntotal = (long) totalCount *(long) numWorkers;
 
             // Écriture de la ligne de résultats
             writer.write(duration_ms + "," + pi + "," + difference + "," + errorPercent + "," 
