@@ -17,7 +17,7 @@ public class Pi
     {
 	long total=0;
 	// 10 workers, 50000 iterations eac
-	total = new Master().doRun(100000000, 10); 
+	total = new Master().doRun(1000000000, 8); 
 	System.out.println("total from Master = " + total);
 	
     }
@@ -68,21 +68,24 @@ class Master {
 
 
 
-	String fileName = "pi_results_with_weak_scaling_master-workers.csv";	
+	String fileName = "erreurs.csv";	
         try (java.io.FileWriter writer = new java.io.FileWriter(fileName, true)) { // true = append
             // Vérifier si le fichier est vide pour écrire l’en-tête
             java.io.File file = new java.io.File(fileName);
             if (file.length() == 0) {
-            writer.write("temps_ms,pi_valeur,difference,error_percent,ntotal,n_workers\n");
+            writer.write("temps_ms,pi_valeur,erreur_avant,error_avant_relative,log10Error,ntotal,n_workers\n");
             }
 
-			double difference = pi - Math.PI;
-    		double errorPercent = difference / Math.PI * 100;
+			double erreur_avant = pi - Math.PI;
+    		double errorPercent = erreur_avant / Math.PI * 100;
+			double erreur_avant_relative = erreur_avant / pi;
+			double absError = Math.abs(erreur_avant);
+			double log10Error = Math.log10(absError); 
     		long ntotal = (long) totalCount *(long) numWorkers;
 
             // Écriture de la ligne de résultats
-            writer.write(duration_ms + "," + pi + "," + difference + "," + errorPercent + "," 
-                     + ntotal + "," + numWorkers + "\n");	
+            writer.write(duration_ms + "," + pi + "," + erreur_avant + "," + erreur_avant_relative + "," + log10Error + "," + 
+                    ntotal + "," + numWorkers + "\n");	
 
             System.out.println("Résultats ajoutés dans : " + fileName);
 
