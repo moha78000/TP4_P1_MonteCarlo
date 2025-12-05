@@ -1,6 +1,8 @@
+package MasterWorkers;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
+import Pi.java.*; 
 /**
  * Worker is a server. It computes PI by Monte Carlo method and sends 
  * the result to Master.
@@ -37,18 +39,15 @@ public class WorkerSocket {
 
                 int N = Integer.parseInt(str);
                 System.out.println("Worker reçoit N = " + N);
+                
+                // Utilisation de Master.doRun pour le calcul
+                Master master = new Master();
+                long total = master.doRun(N, 1);
 
-                // ---- Monte Carlo ----
-                int nb_cible = 0;
-                for (int i = 0; i < N; i++) {
-                    double x = rand.nextDouble();
-                    double y = rand.nextDouble();
-                    if (x*x + y*y <= 1.0) nb_cible++;
-                }
-                // ----------------------
-
-                System.out.println("Worker dans la cible = " + nb_cible);
-                pWrite.println("" + nb_cible);
+              
+                
+                System.out.println("Worker total calculé par Master = " + total);
+                pWrite.println("" + total);  // <- envoie le résultat au Master socket
 
             } else {
                 System.out.println("Worker reçoit END → arrêt.");
